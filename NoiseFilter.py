@@ -36,7 +36,7 @@ for i in range(1, num_labels):
 
 
 # STEP 4: Save Output
-#cv2.imwrite("iron_man_cleaned.jpg", cleaned)
+cv2.imwrite("iron_man_cleaned.jpg", cleaned)
 
 # STEP 5: Display Comparison
 cv2.imshow("Original", img)
