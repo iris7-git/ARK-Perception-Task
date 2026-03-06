@@ -59,7 +59,38 @@ while(1):
 
     lines = sorted(lines, reverse=True)
 
-    top_lines = lines[:10]
+    top_lines = lines[:6]
+
+    # ---- MEDIAL AXIS FROM HOUGH LINES ----
+
+    if len(top_lines) >= 2:
+
+        vote1, r1, t1 = top_lines[0]
+        vote2, r2, t2 = top_lines[1]
+
+        rho1 = rhos[r1]
+        theta1 = thetas[t1]
+
+        rho2 = rhos[r2]
+        theta2 = thetas[t2]
+
+        # average line parameters
+        rho_mid = (rho1 + rho2) / 2
+        theta_mid = (theta1 + theta2) / 2
+
+        a = np.cos(theta_mid)
+        b = np.sin(theta_mid)
+
+        x0 = a * rho_mid
+        y0 = b * rho_mid
+
+        x1 = int(x0 + 1000*(-b))
+        y1 = int(y0 + 1000*(a))
+
+        x2 = int(x0 - 1000*(-b))
+        y2 = int(y0 - 1000*(a))
+
+        cv2.line(frame,(x1,y1),(x2,y2),(0,255,0),3)  # GREEN medial axis
 
     for vote,r,t in top_lines:
 
