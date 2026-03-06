@@ -61,8 +61,7 @@ while(1):
 
     top_lines = lines[:6]
 
-    # ---- MEDIAL AXIS FROM HOUGH LINES ----
-
+    # MEDIAL AXIS
     if len(top_lines) >= 2:
 
         vote1, r1, t1 = top_lines[0]
@@ -109,7 +108,7 @@ while(1):
         x2 = int((x0 - 1000*(-b)))
         y2 = int((y0 - 1000*(a)))
 
-        cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),2)
+        #cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),2)
 
 
     cv2.imshow('frame',frame)
