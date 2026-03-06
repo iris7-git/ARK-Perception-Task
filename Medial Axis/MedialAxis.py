@@ -11,11 +11,10 @@ while(1):
         print('Video Ended.')
         break
     fgmask = fgbg.apply(frame)
-    kernel = np.ones((5,5),np.uint8)
-    erosion = cv2.erode(fgmask,kernel,iterations = 1)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+    opening = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
 
-
-    cv2.imshow('frame',erosion)
+    cv2.imshow('frame',opening)
     k = cv2.waitKey(30) & 0xff #for Esc
     if k == 27:
         break
