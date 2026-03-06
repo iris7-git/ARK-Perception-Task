@@ -25,6 +25,7 @@ while(1):
     abs_y = cv2.convertScaleAbs(sobely)
 
     edges = cv2.addWeighted(abs_x,0.5,abs_y,0.5,0)
+    _, edges = cv2.threshold(edges, 80, 255, cv2.THRESH_BINARY)
 
     # Manual Hough Transform
     height, width = edges.shape
@@ -32,7 +33,7 @@ while(1):
     diag_len = int(np.sqrt(height*height + width*width))
 
     rhos = np.arange(-diag_len, diag_len, 1)
-    thetas = np.deg2rad(np.arange(-90, 90))
+    thetas = np.deg2rad(np.arange(-90, 90,4))
 
     accumulator = np.zeros((len(rhos), len(thetas)), dtype=np.uint64)
 
@@ -47,7 +48,7 @@ while(1):
             accumulator[rho + diag_len, t_idx] += 1
 
     # Detect strongest lines
-    threshold = 150
+    threshold = 120
 
     for r in range(accumulator.shape[0]):
         for t in range(accumulator.shape[1]):
