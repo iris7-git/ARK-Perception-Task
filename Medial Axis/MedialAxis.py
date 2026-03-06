@@ -50,26 +50,35 @@ while(1):
     # Detect strongest lines
     threshold = 120
 
+    lines = []
+
     for r in range(accumulator.shape[0]):
         for t in range(accumulator.shape[1]):
             if accumulator[r,t] > threshold:
+                lines.append((accumulator[r,t],r,t))
 
-                rho = rhos[r]
-                theta = thetas[t]
+    lines = sorted(lines, reverse=True)
 
-                a = np.cos(theta)
-                b = np.sin(theta)
+    top_lines = lines[:10]
 
-                x0 = a*rho
-                y0 = b*rho
+    for vote,r,t in top_lines:
 
-                x1 = int(x0 + 1000*(-b))
-                y1 = int(y0 + 1000*(a))
+        rho = rhos[r]
+        theta = thetas[t]
 
-                x2 = int(x0 - 1000*(-b))
-                y2 = int(y0 - 1000*(a))
+        a = np.cos(theta)
+        b = np.sin(theta)
 
-                cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),2)
+        x0 = a*rho
+        y0 = b*rho
+
+        x1 = int((x0 + 1000*(-b)))
+        y1 = int((y0 + 1000*(a)))
+
+        x2 = int((x0 - 1000*(-b)))
+        y2 = int((y0 - 1000*(a)))
+
+        cv2.line(frame,(x1,y1),(x2,y2),(0,0,255),2)
 
 
     cv2.imshow('frame',frame)
