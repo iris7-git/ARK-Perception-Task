@@ -13,11 +13,11 @@ while(1):
     fgmask = fgbg.apply(frame)
     # remove weak gray noise
     #_, fgmask = cv2.threshold(fgmask, 200, 255, cv2.THRESH_BINARY)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(7,7))
     opening = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
-    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+    #closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
 
-    cv2.imshow('frame',closing)
+    cv2.imshow('frame',opening)
     k = cv2.waitKey(30) & 0xff #for Esc
     if k == 27:
         break
