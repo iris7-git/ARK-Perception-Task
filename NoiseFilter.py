@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-MIN_COMPONENT_AREA = 6.5   #6.5 is choosen by trial andS error
+MIN_COMPONENT_AREA = 6.5   #6.5 is choosen by trial and error
 
 
 img = cv2.imread("iron_man_noisy.jpg", cv2.IMREAD_GRAYSCALE)
