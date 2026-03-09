@@ -1,0 +1,70 @@
+function [X, Y] = LineFollower(R, G, B)
+    Rd = double(R); Gd = double(G); Bd = double(B);
+    redMask = (Rd > 110) & ((Rd - Gd) > 40) & ((Rd - Bd) > 40);
+    [rows, cols] = find(redMask);
+
+    if isempty(rows)
+        X = 0.3; Y = 0;
+        return;
+    end
+
+    objWidth       = max(cols) - min(cols);
+    objHeight      = max(rows) - min(rows);
+    totalRedPixels = sum(redMask(:));
+    extent         = totalRedPixels / (objWidth * objHeight);
+    lineEnded      = min(rows) > 5;
+
+    if (objWidth > 38 && extent > 0.65 && lineEnded)
+        X = 0; Y = 0;
+        return;
+    end
+
+    skelRows  = zeros(1, 120);
+    skelCols  = zeros(1, 120);
+    skelCount = 0;
+
+    for r = 1:120
+        redIdx = find(redMask(r, :));
+        if length(redIdx) >= 3
+            skelCount = skelCount + 1;
+            skelRows(skelCount) = r;
+            skelCols(skelCount) = (redIdx(1) + redIdx(end)) / 2;
+        end
+    end
+
+    skelRows = skelRows(1:skelCount);
+    skelCols = skelCols(1:skelCount);
+
+    if skelCount < 3
+        X = 0.3; Y = 0;
+        return;
+    end
+
+    CENTER    = 45;  % mechanical camera offset 
+    targetRow = skelRows(1);
+    targetCol = skelCols(1);
+
+    for i = 1:skelCount
+        if skelRows(i) <= 60
+            targetRow = skelRows(i);
+            targetCol = skelCols(i);
+            break;
+        end
+    end
+
+    dRow = 120 - targetRow;
+    dCol = targetCol - CENTER;
+
+    mag = sqrt(dRow^2 + dCol^2);
+    if mag < 1e-6
+        X = 1; Y = 0;
+        return;
+    end
+
+    Xraw = dRow / mag;
+    Yraw = dCol / mag;
+
+    X = Xraw * 0.45;
+    Y = Yraw * 1.0;
+
+end
